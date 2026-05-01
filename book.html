@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Call — Dan James</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #030806;
+            background-image:
+                radial-gradient(ellipse 80% 45% at 50% -5%, rgba(18, 60, 32, 0.55) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 30% at 50% 105%, rgba(12, 45, 22, 0.3) 0%, transparent 55%);
+            color: #e8f0ea;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .header img {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        /* ── Main Container ── */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 60px 24px 88px;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 48px 36px 40px;
+            box-shadow:
+                0 8px 48px rgba(0, 0, 0, 0.45),
+                0 2px 12px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        /* ── Heading ── */
+        .page-title {
+            font-size: clamp(26px, 6vw, 36px);
+            font-weight: 800;
+            color: #1a2e22;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        /* ── Calendly widget wrapper ── */
+        .calendly-wrap {
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 28px 24px;
+            text-align: center;
+        }
+
+        .footer img {
+            height: 26px;
+            width: auto;
+            opacity: 0.35;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .container {
+                padding: 32px 16px 64px;
+            }
+
+            .card {
+                padding: 36px 20px 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Header ── -->
+    <header class="header">
+        <img src="Lincko-logo.png" alt="Lincko" onerror="this.style.display='none'">
+    </header>
+
+    <!-- ── Main ── -->
+    <main class="container">
+        <div class="card">
+
+            <h1 class="page-title">Pick Your Best Time<br>For Our Call</h1>
+
+            <!-- Calendly inline widget begin -->
+            <div class="calendly-wrap">
+                <div class="calendly-inline-widget" data-url="https://calendly.com/danjames765/d100-meeting" style="min-width:280px;height:700px;"></div>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+            </div>
+            <!-- Calendly inline widget end -->
+
+        </div>
+    </main>
+
+    <!-- ── Footer ── -->
+    <footer class="footer">
+        <img src="Lincko-logo.png" alt="Lincko" onerror="this.style.display='none'">
+    </footer>
+
+</body>
+</html>
