@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Your Call — Dan James</title>
+    <meta name="robots" content="noindex">
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://calendly.com">
+    <link rel="preconnect" href="https://assets.calendly.com">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -12,19 +15,32 @@
             padding: 0;
         }
 
-        html {
-            scroll-behavior: smooth;
+        :root {
+            --bg: #030806;
+            --panel: #0a120d;
+            --line: rgba(255, 255, 255, 0.08);
+            --text: #e8f0ea;
+            --muted: rgba(220, 240, 228, 0.58);
+            --faint: rgba(220, 240, 228, 0.38);
+            --green: #4cd97b;
+            --green-soft: #5dd98a;
         }
 
         body {
-            background-color: #030806;
+            background-color: var(--bg);
             background-image:
                 radial-gradient(ellipse 80% 45% at 50% -5%, rgba(18, 60, 32, 0.55) 0%, transparent 55%),
                 radial-gradient(ellipse 50% 30% at 50% 105%, rgba(12, 45, 22, 0.3) 0%, transparent 55%);
-            color: #e8f0ea;
+            color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
         /* ── Header ── */
@@ -42,39 +58,381 @@
             display: block;
         }
 
-        /* ── Main Container ── */
+        /* ── Layout ── */
         .container {
-            max-width: 600px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 60px 24px 88px;
+            padding: 56px 24px 88px;
         }
 
-        /* ── Card ── */
-        .card {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 48px 36px 40px;
-            box-shadow:
-                0 8px 48px rgba(0, 0, 0, 0.45),
-                0 2px 12px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-
-        /* ── Heading ── */
-        .page-title {
-            font-size: clamp(26px, 6vw, 36px);
-            font-weight: 800;
-            color: #1a2e22;
-            letter-spacing: -0.03em;
-            line-height: 1.15;
+        .intro {
             text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(42, 120, 70, 0.18);
+            border: 1px solid rgba(60, 160, 90, 0.3);
+            border-radius: 100px;
+            padding: 6px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--green-soft);
+            margin-bottom: 22px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green-soft);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--green-soft);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .page-title {
+            font-size: clamp(30px, 5.4vw, 48px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+        }
+
+        .page-title .green {
+            color: var(--green);
+        }
+
+        .page-sub {
+            font-size: clamp(15px, 2vw, 18px);
+            line-height: 1.6;
+            color: var(--muted);
+            max-width: 520px;
+            margin: 16px auto 0;
+        }
+
+        /* ── Booking card ── */
+        .booking {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow:
+                0 32px 80px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(76, 217, 123, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* Left: call details */
+        .details {
+            position: relative;
+            padding: 36px 32px;
+            border-right: 1px solid var(--line);
+            background:
+                radial-gradient(ellipse 120% 60% at 0% 0%, rgba(76, 217, 123, 0.08), transparent 60%);
+        }
+
+        .host {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .avatar {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--green), rgba(76, 217, 123, 0.05) 35%, #12412d 60%, var(--green));
+            animation: spin 8s linear infinite;
+        }
+
+        .avatar img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--panel);
+            display: block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .host-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .host-role {
+            font-size: 13px;
+            color: var(--faint);
+            margin-top: 2px;
+        }
+
+        .call-title {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+            margin-bottom: 18px;
+        }
+
+        .meta {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .meta li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--muted);
+        }
+
+        .meta svg {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            margin-top: 1px;
+            color: var(--green);
+        }
+
+        .meta strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--line);
+            margin: 28px 0 24px;
+        }
+
+        .steps-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--faint);
+            margin-bottom: 18px;
+        }
+
+        .steps {
+            list-style: none;
+            counter-reset: step;
+            position: relative;
+        }
+
+        .steps li {
+            position: relative;
+            counter-increment: step;
+            padding: 0 0 20px 40px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--muted);
+        }
+
+        .steps li:last-child {
+            padding-bottom: 0;
+        }
+
+        /* Connector line between steps */
+        .steps li:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 13px;
+            top: 28px;
+            bottom: 2px;
+            width: 1px;
+            background: linear-gradient(var(--line), rgba(76, 217, 123, 0.25), var(--line));
+        }
+
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: -2px;
+            width: 27px;
+            height: 27px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--green-soft);
+            background: rgba(42, 120, 70, 0.18);
+            border: 1px solid rgba(60, 160, 90, 0.3);
+            border-radius: 50%;
+        }
+
+        .steps strong {
+            display: block;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .help {
+            margin-top: 28px;
+            font-size: 13px;
+            color: var(--faint);
+        }
+
+        .help a {
+            color: var(--green-soft);
+            font-weight: 600;
+        }
+
+        .help a:hover {
+            text-decoration: underline;
+        }
+
+        /* Booked state (set after Calendly confirms) */
+        .booked-banner {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--green-soft);
+            background: rgba(76, 217, 123, 0.1);
+            border: 1px solid rgba(76, 217, 123, 0.3);
+            border-radius: 12px;
+        }
+
+        .booked-banner svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .is-booked .booked-banner {
+            display: flex;
+        }
+
+        /* Right: calendar */
+        .calendar {
+            position: relative;
+            min-height: 680px;
+            background: #ffffff;
+        }
+
+        .calendar {
+            overflow: hidden;
+        }
+
+        .calendly-inline-widget {
+            min-width: 280px;
+            height: 680px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Desktop: Calendly draws its own bordered card with outer margins.
+           Pull the iframe out past them so the calendar sits flush in our panel. */
+        /* Calendly centres a fixed-width bordered card (~678px) inside the iframe.
+           Size the column just under it and clip, so only the calendar shows. */
+        @media (min-width: 901px) {
+            .booking {
+                grid-template-columns: 1fr 674px;
+            }
+
+            .cal-clip {
+                height: 596px;
+                overflow: hidden;
+            }
+
+            .calendly-inline-widget {
+                margin: -68px -40px 0;
+                height: 780px;
+            }
+        }
+
+        .calendar.ready .calendly-inline-widget {
+            opacity: 1;
+        }
+
+        .calendly-inline-widget iframe {
+            display: block;
+        }
+
+        /* Loading skeleton, shown until Calendly reports it's ready */
+        .skeleton {
+            position: absolute;
+            inset: 0;
+            padding: 44px 48px;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .calendar.ready .skeleton {
+            opacity: 0;
+        }
+
+        .sk {
+            border-radius: 8px;
+            background: linear-gradient(90deg, #f1f3f5 0%, #e6e9ec 50%, #f1f3f5 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            from { background-position: 100% 0; }
+            to { background-position: -100% 0; }
+        }
+
+        .sk-title {
+            width: 220px;
+            height: 22px;
             margin-bottom: 36px;
         }
 
-        /* ── Calendly widget wrapper ── */
-        .calendly-wrap {
-            border-radius: 16px;
-            overflow: hidden;
+        .sk-month {
+            width: 140px;
+            height: 16px;
+            margin: 0 auto 30px;
+        }
+
+        .sk-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 44px);
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sk-day {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
         }
 
         /* ── Footer ── */
@@ -91,13 +449,71 @@
         }
 
         /* ── Responsive ── */
-        @media (max-width: 600px) {
-            .container {
-                padding: 32px 16px 64px;
+        @media (max-width: 900px) {
+            .booking {
+                grid-template-columns: 1fr;
             }
 
-            .card {
-                padding: 36px 20px 28px;
+            .details {
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .steps-block,
+            .help {
+                display: none;
+            }
+
+            .calendar {
+                min-height: 560px;
+            }
+
+            .calendly-inline-widget {
+                height: 600px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 36px 16px 64px;
+            }
+
+            .intro {
+                margin-bottom: 28px;
+            }
+
+            .booking {
+                border-radius: 20px;
+            }
+
+            .details {
+                padding: 26px 22px;
+            }
+
+            .call-title {
+                font-size: 22px;
+            }
+
+            .skeleton {
+                padding: 32px 16px;
+            }
+
+            .sk-grid {
+                grid-template-columns: repeat(7, 36px);
+                gap: 6px;
+            }
+
+            .sk-day {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .badge-dot,
+            .avatar::before,
+            .sk {
+                animation: none;
             }
         }
     </style>
@@ -106,29 +522,137 @@
 
     <!-- ── Header ── -->
     <header class="header">
-        <img src="Lincko-logo.png" alt="Lincko" onerror="this.style.display='none'">
+        <a href="https://www.lincko.co/" target="_blank" rel="noopener noreferrer">
+            <img src="Lincko-logo.png" alt="Lincko" onerror="this.style.display='none'">
+        </a>
     </header>
 
     <!-- ── Main ── -->
     <main class="container">
-        <div class="card">
 
-            <h1 class="page-title">Pick Your Best Time<br>For Our Call</h1>
-
-            <!-- Calendly inline widget begin -->
-            <div class="calendly-wrap">
-                <div class="calendly-inline-widget" data-url="https://calendly.com/dan-lincko/new-meeting" style="min-width:280px;height:700px;"></div>
-                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <div class="intro">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                1-on-1 Consulting
             </div>
-            <!-- Calendly inline widget end -->
-
+            <h1 class="page-title">Pick Your Best Time <span class="green">For Our Call</span></h1>
+            <p class="page-sub">Choose a slot that works for you. Your calendar invite and video link land in your inbox straight away.</p>
         </div>
+
+        <section class="booking" id="booking">
+
+            <!-- Call details -->
+            <aside class="details">
+
+                <div class="booked-banner" role="status">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    You're booked. Check your inbox.
+                </div>
+
+                <div class="host">
+                    <div class="avatar">
+                        <img src="/dan-james-avatar.png" alt="Dan James">
+                    </div>
+                    <div>
+                        <div class="host-name">Dan James</div>
+                        <div class="host-role">Founder, Lincko</div>
+                    </div>
+                </div>
+
+                <h2 class="call-title">Consulting Call</h2>
+
+                <ul class="meta">
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8z"/></svg>
+                        <span>Video call. Link sent on confirmation.</span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <span>Times shown in your local time zone.</span>
+                    </li>
+                </ul>
+
+                <div class="steps-block">
+                    <div class="divider"></div>
+                    <div class="steps-label">What Happens Next</div>
+                    <ol class="steps">
+                        <li><strong>Pick a time</strong>Choose a day, then a slot that suits you.</li>
+                        <li><strong>Get your invite</strong>Calendar invite and video link go straight to your inbox.</li>
+                        <li><strong>We build your game plan</strong>We map out outreach so good your dream prospects can't ignore it.</li>
+                    </ol>
+                </div>
+
+                <p class="help">Can't find a time? Email <a href="mailto:dan@lincko.co">dan@lincko.co</a></p>
+
+            </aside>
+
+            <!-- Calendar -->
+            <div class="calendar" id="calendar">
+
+                <div class="skeleton" aria-hidden="true">
+                    <div class="sk sk-title"></div>
+                    <div class="sk sk-month"></div>
+                    <div class="sk-grid">
+                        <div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div>
+                        <div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div>
+                        <div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div>
+                        <div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div>
+                        <div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div><div class="sk sk-day"></div>
+                    </div>
+                </div>
+
+                <!-- Calendly inline widget: Calendly's own styling; event details are shown natively on the left -->
+                <div class="cal-clip">
+                <div class="calendly-inline-widget" id="calendly-widget"
+                     data-url="https://calendly.com/dan-lincko/new-meeting?hide_event_type_details=1&amp;hide_gdpr_banner=1"></div>
+                <script>
+                    // Mobile: let the widget grow with its content. Desktop keeps a fixed, clipped height.
+                    if (window.matchMedia('(max-width: 900px)').matches) {
+                        document.getElementById('calendly-widget').setAttribute('data-resize', 'true');
+                    }
+                </script>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
     <!-- ── Footer ── -->
     <footer class="footer">
         <img src="Lincko-logo.png" alt="Lincko" onerror="this.style.display='none'">
     </footer>
+
+    <script>
+        (function () {
+            var calendar = document.getElementById('calendar');
+            var booking = document.getElementById('booking');
+
+            function ready() {
+                calendar.classList.add('ready');
+            }
+
+            // Fallback in case Calendly's ready event never arrives
+            setTimeout(ready, 6000);
+
+            window.addEventListener('message', function (e) {
+                if (!e.data || typeof e.data.event !== 'string' || e.data.event.indexOf('calendly.') !== 0) return;
+
+                if (e.data.event === 'calendly.event_type_viewed') {
+                    ready();
+                }
+
+                if (e.data.event === 'calendly.event_scheduled') {
+                    booking.classList.add('is-booked');
+                    if (window.innerWidth <= 900) {
+                        booking.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        })();
+    </script>
 
 </body>
 </html>
