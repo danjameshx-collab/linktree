@@ -163,6 +163,64 @@
             height: 24px;
         }
 
+        /* ── Social Icon Hover Labels ── */
+        .social-icon { position: relative; }
+
+        .social-icon::after,
+        .social-icon::before {
+            position: absolute;
+            left: 50%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+            z-index: 10;
+        }
+
+        .social-icon::after {
+            content: attr(data-label);
+            top: calc(100% + 12px);
+            transform: translate(-50%, -6px) scale(0.94);
+            transform-origin: 50% 0;
+            padding: 7px 12px;
+            border-radius: 9px;
+            background: rgba(12, 22, 16, 0.92);
+            border: 1px solid rgba(93, 217, 138, 0.28);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 0 4px rgba(93, 217, 138, 0.04);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            color: #e8f5ec;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .social-icon::before {
+            content: "";
+            top: calc(100% + 7px);
+            width: 9px;
+            height: 9px;
+            background: rgba(12, 22, 16, 0.92);
+            border-left: 1px solid rgba(93, 217, 138, 0.28);
+            border-top: 1px solid rgba(93, 217, 138, 0.28);
+            transform: translate(-50%, -6px) rotate(45deg);
+        }
+
+        @media (hover: hover) {
+            .social-icon:hover::after,
+            .social-icon:focus-visible::after {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+                transition-delay: 0.06s;
+            }
+            .social-icon:hover::before,
+            .social-icon:focus-visible::before {
+                opacity: 1;
+                transform: translate(-50%, 0) rotate(45deg);
+                transition-delay: 0.06s;
+            }
+        }
+
         /* ── Section Divider ── */
         .section-divider {
             display: flex;
@@ -336,14 +394,14 @@
             <div class="socials">
 
                 <!-- YouTube -->
-                <a href="https://www.youtube.com/@danjameshx" target="_blank" rel="noopener noreferrer" class="social-icon" title="YouTube">
+                <a href="https://www.youtube.com/@danjameshx" target="_blank" rel="noopener noreferrer" class="social-icon" data-label="Business YouTube" aria-label="Business YouTube">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                 </a>
 
                 <!-- YouTube (outline variant) -->
-                <a href="https://www.youtube.com/@danjameshh" target="_blank" rel="noopener noreferrer" class="social-icon" title="YouTube">
+                <a href="https://www.youtube.com/@danjameshh" target="_blank" rel="noopener noreferrer" class="social-icon" data-label="Cine Vlog YouTube" aria-label="Cine Vlog YouTube">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="5.5" width="20" height="13" rx="3"/>
                         <path d="M9.5 9l6 3-6 3V9z" fill="currentColor" stroke="none"/>
@@ -351,7 +409,7 @@
                 </a>
 
                 <!-- Email / Newsletter -->
-                <a href="https://lincko-join-newsletter.vercel.app/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Newsletter">
+                <a href="https://lincko-join-newsletter.vercel.app/" target="_blank" rel="noopener noreferrer" class="social-icon" data-label="Newsletter" aria-label="Newsletter">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="4" width="20" height="16" rx="2"/>
                         <path d="M2 7l10 7 10-7"/>
@@ -359,14 +417,14 @@
                 </a>
 
                 <!-- LinkedIn -->
-                <a href="https://www.linkedin.com/in/dan-james-%F0%9F%90%8B-52532914a/" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn">
+                <a href="https://www.linkedin.com/in/dan-james-%F0%9F%90%8B-52532914a/" target="_blank" rel="noopener noreferrer" class="social-icon" data-label="LinkedIn" aria-label="LinkedIn">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                     </svg>
                 </a>
 
                 <!-- Instagram -->
-                <a href="https://www.instagram.com/danjameshx/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Instagram">
+                <a href="https://www.instagram.com/danjameshx/" target="_blank" rel="noopener noreferrer" class="social-icon" data-label="Instagram" aria-label="Instagram">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="5"/>
                         <circle cx="12" cy="12" r="4.5"/>
@@ -375,7 +433,7 @@
                 </a>
 
                 <!-- Website -->
-                <a href="https://www.lincko.co/" target="_blank" rel="noopener noreferrer" class="social-icon" title="Website">
+                <a href="https://www.lincko.co/" target="_blank" rel="noopener noreferrer" class="social-icon" data-label="Lincko Website" aria-label="Lincko Website">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/>
                         <line x1="2" y1="12" x2="22" y2="12"/>
