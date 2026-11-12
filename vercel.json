@@ -1,3 +1,16 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/resources", "destination": "/youtube-scripts", "permanent": false },
+    { "source": "/scripts", "destination": "/youtube-scripts", "permanent": false },
+    { "source": "/lp/:slug", "destination": "/youtube-scripts/:slug", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/youtube-scripts", "destination": "https://lincko-youtube-scripts.vercel.app/resources" },
+    { "source": "/youtube-scripts/:slug", "destination": "https://lincko-youtube-scripts.vercel.app/lp/:slug" },
+    { "source": "/shared/:path*", "destination": "https://lincko-youtube-scripts.vercel.app/shared/:path*" },
+    { "source": "/thumbs/:path*", "destination": "https://lincko-youtube-scripts.vercel.app/thumbs/:path*" },
+    { "source": "/guide/:path*", "destination": "https://lincko-youtube-scripts.vercel.app/guide/:path*" },
+    { "source": "/files/:path*", "destination": "https://lincko-youtube-scripts.vercel.app/files/:path*" }
+  ]
 }
